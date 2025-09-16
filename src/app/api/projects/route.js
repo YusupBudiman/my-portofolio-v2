@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server";
-import { projects } from "../../../lib/project";
+// import { NextResponse } from "next/server";
 
-export async function GET() {
-  return NextResponse.json(projects);
-}
+// export async function GET() {
+//   return NextResponse.json(projects);
+// }
