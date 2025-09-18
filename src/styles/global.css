@@ -64,7 +64,7 @@ body {
 .tag {
   position: absolute;
   inset: 3px 3px 3px 3px;
-  background-color: #000000;
+  background-color: #0b1014;
   border-radius: 50px;
   display: flex;
   align-items: center;
@@ -74,8 +74,24 @@ body {
 }
 
 .title {
-  font-weight: 600;
   letter-spacing: 0.1em;
   line-height: 1.25;
   text-shadow: 0 0 10px rgba(128, 128, 128, 0.418);
+}
+/* ---------- */
+
+.perspective {
+  perspective: 1500px;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
 }

@@ -10,7 +10,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="min-h-screen flex flex-col">
-        <div className="layer-blur"></div>
         <Header />
         {children}
         <Footer />
