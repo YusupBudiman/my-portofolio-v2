@@ -1,12 +1,13 @@
 import { projects } from "@/data/Projects";
-import ProjectCard from "@/components/ProjectCard";
+import ProjectCarousel from "@/components/ProjectCarousel";
 
 export default function ProjectsSection() {
   return (
-    <section id="projects" className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {projects.map((project, index) => (
-        <ProjectCard key={index} {...project} />
-      ))}
+    <section
+      id="projects"
+      className="flex min-h-screen items-center justify-center"
+    >
+      <ProjectCarousel projects={projects} />
     </section>
   );
 }

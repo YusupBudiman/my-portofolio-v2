@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import Spline from "@splinetool/react-spline";
+// import Spline from "@splinetool/react-spline";
 import Image from "next/image";
 // data
 import { hero, socials } from "@/data/Hero";
@@ -8,53 +8,50 @@ import { hero, socials } from "@/data/Hero";
 export default function Hero() {
   return (
     <div className="min-h-screen w-full flex">
-      <div className="layer-blur z-[-2]"></div>
-      <div className="absolute to-0 right-0 z-[-1] w-[20rem] h-[20rem] lg:w-[40rem] lg:h-[40rem] ">
-        <Image
-          src="/images/gradient.png"
-          alt="Gradient"
-          fill
-          sizes="40vw"
-          className="object-cover "
-          priority
-        />
-      </div>
-
-      <div className="absolute top-[10%] left-[5%] max-w-[40rem] flex flex-col justify-center">
-        {/* Link Socials */}
-        <div className="flex mb-3">
-          {socials.map((item, index) => (
-            <Link
-              key={index}
-              href={item.media}
-              target="_blank"
-              className="mx-2 text-2xl text-blue-50 hover:text-gray-800 lg:text-4xl"
-            >
-              {item.icon}
-            </Link>
-          ))}
-        </div>
-
-        {/* Hero Content */}
-        <div className="">
-          <div className="title flex flex-col font-semibold text-4xl lg:text-6xl lg:items-start mb-8  ">
-            {hero.title.map((item, index) => (
-              <h1 key={index}>{item}</h1>
-            ))}
+      <div className="absolute top-20 left-0 right-0 flex flex-col items-center justify-center gap-6">
+        <div className="flex flex-col items-center justify-center">
+          <div className="px-1 pt-1 pb-2 bg-white mb-4 rotate-355">
+            <Image
+              src="/images/myfoto24.png"
+              className="bg-gradient-to-br from-[#232323] to-[#5f5f5f] object-cover  w-12 h-12"
+              width={200}
+              height={200}
+              alt="Hero Background"
+            />
           </div>
-          <div className="tag-box mb-8">
-            <h3 className="tag">{hero.subtitle}</h3>
-          </div>
-          <p className="text-md w-[80vw] lg:text-xl tracking-tighter lg:w-[35rem] text-gray-400">
-            {hero.description}
+
+          <h1 className="text-2xl text-white font-semibold mb-6">
+            Full Stack, Full Impact
+          </h1>
+          <p className="max-w-md text-center text-sm text-gray-300 mb-6">
+            I build modern web applications from frontend to backend with a
+            focus on performance, clarity, and a seamless user experience.
           </p>
+          <div className="flex items-center justify-between gap-2">
+            <Link
+              href={"#contact"}
+              className="text-[#18181a] bg-[#f9fc9f] border-2 border-[#e3e8b8] px-4 py-1 rounded-xs text-xs font-semibold"
+            >
+              WORK WITH ME
+            </Link>
+            <Link
+              href={"#projects"}
+              className="text-white bg-gradient-to-b from-[#252525] to-[#171717] border-2 border-[#242224] px-4 py-1 rounded-xs text-xs font-semibold"
+            >
+              PROJECTS
+            </Link>
+          </div>
         </div>
-      </div>
-      <div className="absolute bottom-0 right-0 w-full md:h-full">
-        <Spline
-          scene="https://prod.spline.design/2Pjo76tSvSPPIPev/scene.splinecode"
-          className="w-full h-full bg-dark"
-        />
+
+        <div className="flex flex-col items-center justify-center">
+          <p className="text-sm text-white mb-2">
+            Fast learner. Highly adaptable. Experienced though academy
+            projects,internship work, and personal full-stack builds.
+          </p>
+          <span className="text-sm text-[#e3e8b8]">
+            developer@yusupbudiman3@gmail.com
+          </span>
+        </div>
       </div>
     </div>
   );

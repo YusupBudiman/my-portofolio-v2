@@ -2,8 +2,8 @@
 import { FaGithub, FaLinkedin, FaInstagramSquare } from "react-icons/fa";
 
 export const hero = {
-  title: ["Hi! I'm", "Yusup Budiman"],
-  subtitle: "Fullstack Web Developer",
+  title: ["Hello", "Yusup Budiman"],
+  subtitle: "About Me",
   description:
     "I’m a Fullstack Developer specializing in building responsive web applications with clean interfaces and seamless user experiences.",
 };
