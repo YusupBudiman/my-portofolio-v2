@@ -1,54 +1,113 @@
 "use client";
-import { useState } from "react";
 
-export default function ContactForm() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
+import { useState, useRef, useEffect } from "react";
+
+export default function ContactForm({ onClose }) {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [status, setStatus] = useState(null);
+  const [showContent, setShowContent] = useState(false);
+
+  const formRef = useRef(null);
 
   const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    setSubmitted(true);
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setStatus("success");
+        setFormData({ name: "", email: "", message: "" });
+      } else setStatus("error");
+    } catch {
+      setStatus("error");
+    }
   };
 
-  return submitted ? (
-    <p className="text-green-600">Thanks for contacting me!</p>
-  ) : (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
-      <input
-        type="text"
-        name="name"
-        placeholder="Your Name"
-        className="w-full border p-2 rounded"
-        onChange={handleChange}
-      />
-      <input
-        type="email"
-        name="email"
-        placeholder="Your Email"
-        className="w-full border p-2 rounded"
-        onChange={handleChange}
-      />
-      <textarea
-        name="message"
-        placeholder="Your Message"
-        className="w-full border p-2 rounded"
-        rows="4"
-        onChange={handleChange}
-      ></textarea>
-      <button
-        type="submit"
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        Send
-      </button>
-    </form>
+  // Trigger showContent after mount / scale animation
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowContent(true);
+    }, 700); // delay sesuai animasi tombol
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return (
+    <div
+      ref={formRef}
+      className={`w-full transition-opacity duration-500  ${
+        showContent ? "opacity-100" : "opacity-0"
+      }`}
+    >
+      {/* Tombol close */}
+      {onClose && (
+        <div className="flex justify-end mb-2">
+          <button
+            onClick={onClose}
+            className="text-white rounded-full shadow-lg cursor-pointer hover:text-red-500 transition-colors"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* Form content */}
+      <div className="max-w-2xl mx-auto p-6  text-white">
+        <h2 className="text-3xl font-bold mb-6 text-center">Contact Me</h2>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <input
+            name="name"
+            placeholder="Your Name"
+            value={formData.name}
+            onChange={handleChange}
+            className="p-3 rounded-md bg-black/20 border border-gray-600 focus:outline-none focus:border-blue-500"
+            required
+          />
+          <input
+            name="email"
+            type="email"
+            placeholder="Your Email"
+            value={formData.email}
+            onChange={handleChange}
+            className="p-3 rounded-md bg-black/20 border border-gray-600 focus:outline-none focus:border-blue-500"
+            required
+          />
+          <textarea
+            name="message"
+            rows="5"
+            placeholder="Your Message"
+            value={formData.message}
+            onChange={handleChange}
+            className="p-3 rounded-md bg-black/20 border border-gray-600 focus:outline-none focus:border-blue-500"
+            required
+          ></textarea>
+          <button
+            type="submit"
+            className="bg-[#0ca48d] hover:bg-[#0e6c5e] transition-colors p-3 rounded-md font-semibold"
+          >
+            {status === "sending" ? "Sending..." : "Send Message"}
+          </button>
+        </form>
+        {status === "success" && (
+          <p className="mt-4 text-green-400">Message sent successfully!</p>
+        )}
+        {status === "error" && (
+          <p className="mt-4 text-red-400">
+            Failed to send message. Try again.
+          </p>
+        )}
+      </div>
+    </div>
   );
 }

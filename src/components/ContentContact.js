@@ -1,25 +1,60 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import ContactForm from "./ContactForm";
 import skills from "@/data/skills";
 
-export default function SkillsSection() {
-  const [activeLogos, setActiveLogos] = useState([]);
+export default function ContactSection() {
+  const [showForm, setShowForm] = useState(false);
   const [buttonHover, setButtonHover] = useState(false);
-  const [buttonActive, setButtonActive] = useState(false);
-  const [animationKey, setAnimationKey] = useState(0);
   const [buttonOffset, setButtonOffset] = useState({ x: 0, y: 0 });
   const [hoveredText, setHoveredText] = useState("");
-  const fullText = "Skills";
-  const prefixLength = fullText.length;
+  const [activeLogos, setActiveLogos] = useState([]);
+  const [animationKey, setAnimationKey] = useState(0);
 
+  const fullText = "Contact";
   const buttonRef = useRef(null);
-  const sectionRef = useRef(null);
   const spellTimeouts = useRef([]);
-
-  // Random rotation for wave/misaligned effect
+  const sectionRef = useRef(null);
   const randomRotationsRef = useRef([]);
 
+  // Spell text saat hover
+  const spellText = () => {
+    let textArray = Array(fullText.length).fill("-");
+    setHoveredText(textArray.join(""));
+
+    spellTimeouts.current.forEach((t) => clearTimeout(t));
+    spellTimeouts.current = [];
+
+    for (let i = 0; i < fullText.length; i++) {
+      const timeout = setTimeout(() => {
+        textArray[i] = fullText[i];
+        setHoveredText(textArray.join(""));
+      }, i * 100);
+      spellTimeouts.current.push(timeout);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (!showForm) {
+      setButtonHover(false);
+      setButtonOffset({ x: 0, y: 0 });
+      setHoveredText(fullText);
+
+      spellTimeouts.current.forEach((t) => clearTimeout(t));
+      spellTimeouts.current = [];
+    }
+  };
+
+  const handleClose = (e) => {
+    e.stopPropagation();
+    setShowForm(false);
+    setHoveredText(fullText);
+    setButtonOffset({ x: 0, y: 0 });
+  };
+
+  // Observer untuk aktifkan logo saat muncul
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -42,57 +77,29 @@ export default function SkillsSection() {
     return () => observer.disconnect();
   }, []);
 
-  const handleMouseLeave = () => {
-    setButtonHover(false);
-    setButtonOffset({ x: 0, y: 0 });
-    setHoveredText(fullText);
-
-    const btn = buttonRef.current;
-    if (!btn) return;
-    btn.style.transition = "transform 0.6s cubic-bezier(0.68, -0.8, 0.27, 1.8)";
-    btn.style.transform = "translate(0px, 0px) scale(1.05)";
-    setTimeout(() => {
-      if (!btn) return;
-      btn.style.transform = "translate(0px, 0px) scale(1)";
-    }, 300);
-
-    spellTimeouts.current.forEach((t) => clearTimeout(t));
-    spellTimeouts.current = [];
-  };
-
-  // Spell: ganti prefix ----- menjadi SKILLS satu per satu lebih cepat
-  const spellText = () => {
-    let textArray = Array(prefixLength).fill("-");
-    setHoveredText(textArray.join(""));
-
-    spellTimeouts.current.forEach((t) => clearTimeout(t));
-    spellTimeouts.current = [];
-
-    for (let i = 0; i < fullText.length; i++) {
-      const timeout = setTimeout(() => {
-        textArray[i] = fullText[i];
-        setHoveredText(textArray.join(""));
-      }, i * 100); // delay 100ms per langkah → cepat
-      spellTimeouts.current.push(timeout);
-    }
-  };
-
   return (
     <section
       ref={sectionRef}
-      id="skills"
-      className={`relative w-full min-h-screen flex items-center justify-center overflow-hidden transition-colors duration-700
-      ${buttonActive ? "bg-white" : "bg-[#161616]"}`}
+      className="relative w-full flex min-h-screen items-center justify-center overflow-hidden transition-colors duration-700 bg-[#161616]"
     >
-      {/* LOGO */}
+      {/* Background Image saat showForm = true */}
+      <div
+        className={`absolute inset-0 bg-[url('/images/dodle-bg.jpg')] bg-cover bg-center bg-no-repeat z-0 transition-opacity duration-700 ${
+          showForm ? "opacity-100" : "opacity-0"
+        }`}
+      ></div>
+
+      {/* Overlay gelap sebelum tombol diklik */}
+      {!showForm && <div className="absolute inset-0 bg-black/50 z-0"></div>}
+
+      {/* LOGO ORBIT */}
       {activeLogos.map((item, index) => {
         const { transform, rotation } = getOrbitTransform(
           index,
           buttonHover,
-          buttonActive,
+          showForm,
           activeLogos.length
         );
-
         const randomRotation = randomRotationsRef.current[index] || 0;
 
         return (
@@ -113,7 +120,7 @@ export default function SkillsSection() {
                 alt="Skills Icon"
                 width={200}
                 height={200}
-                className="logo "
+                className="logo"
               />
             </div>
           </div>
@@ -123,56 +130,59 @@ export default function SkillsSection() {
       {/* LINGKARAN BESAR SAAT KLIK */}
       <div
         className={`absolute rounded-full pointer-events-none
-        w-52 h-52 transform transition-all duration-700 ease-out
-        z-30
-        ${buttonActive ? "scale-[12] bg-black/10" : "scale-0 bg-[#161616]"}`}
+          w-52 h-52 transform transition-all duration-700 ease-out
+          z-30
+          ${showForm ? "scale-[12] bg-black/10" : "scale-0 bg-[#161616]"}`}
       ></div>
 
-      {/* TOMBOL SKILLS */}
-      <div className="absolute inset-0 flex items-center justify-center z-60">
-        <div
-          ref={buttonRef}
-          onMouseEnter={() => {
+      {/* TOMBOL / FORM */}
+      <div
+        ref={buttonRef}
+        onMouseEnter={() => {
+          if (!showForm) {
             setButtonHover(true);
             spellText();
-          }}
-          onMouseLeave={handleMouseLeave}
-          onMouseMove={(e) => {
+          }
+        }}
+        onMouseLeave={handleMouseLeave}
+        onMouseMove={(e) => {
+          if (!showForm) {
             const rect = e.currentTarget.getBoundingClientRect();
             const x = e.clientX - (rect.left + rect.width / 2);
             const y = e.clientY - (rect.top + rect.height / 2);
             setButtonOffset({ x: x * 0.05, y: y * 0.05 });
-          }}
-          onClick={() => setButtonActive(!buttonActive)}
-          className={`flex w-52 h-52 rounded-full items-center justify-center
-            shadow-2xl cursor-pointer
-            ${buttonActive ? "" : "animate-pulse"}`}
-          style={{
-            // Glass effect
-            background: "rgba(255,255,255,0.1)",
-            backdropFilter: "blur(10px)",
-            WebkitBackdropFilter: "blur(10px)",
-            transform: `translate(${buttonOffset.x}px, ${buttonOffset.y}px) scale(1)`,
-            transition: buttonHover
-              ? "none"
-              : "transform 0.6s cubic-bezier(0.68, -0.8, 0.27, 1.8)",
-          }}
-        >
+          }
+        }}
+        onClick={() => {
+          if (!showForm) setShowForm(true);
+        }}
+        className="relative flex items-center justify-center shadow-2xl cursor-pointer z-20 transition-all duration-700"
+        style={{
+          width: showForm ? "500px" : "208px",
+          height: showForm ? "auto" : "208px",
+          borderRadius: showForm ? "1rem" : "9999px",
+          padding: showForm ? "2rem" : "0",
+          background: "rgba(255,255,255,0.1)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          transform: `translate(${buttonOffset.x}px, ${buttonOffset.y}px)`,
+        }}
+      >
+        {!showForm ? (
           <span
-            className="text-5xl font-bold select-none flex items-baseline"
+            className="text-5xl font-bold select-none text-white flex items-baseline"
             style={{
               transform: `translate(${buttonOffset.x}px, ${buttonOffset.y}px)`,
-              transition: buttonHover
-                ? "none"
-                : "transform 0.6s cubic-bezier(0.68, -0.8, 0.27, 1.8)",
-              color: buttonActive ? "rgba(0,0,0)" : " rgba(255,255,255)",
             }}
           >
             {hoveredText || fullText}
-            {/* Kotak kuning lebih kecil, sejajar baseline */}
             <span className="ml-1 w-2 h-2 bg-yellow-400 inline-block align-baseline"></span>
           </span>
-        </div>
+        ) : (
+          <div className="w-full relative z-30">
+            <ContactForm onClose={handleClose} />
+          </div>
+        )}
       </div>
     </section>
   );

@@ -12,6 +12,15 @@ body {
   color: #e7e7e7;
   min-height: 100vh;
   line-height: 1.5;
+  overflow-x: hidden;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+.scrollbar-hidden {
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* Gradient and Layer blur effect */
@@ -201,4 +210,28 @@ body {
   pointer-events: none;
   transition: all 0.7s ease-out;
   z-index: 30;
+}
+
+@keyframes shakeY {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateY(-3px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateY(3px);
+  }
+}
+
+.logo-shake {
+  animation: shakeY 0.5s ease-in-out infinite;
 }

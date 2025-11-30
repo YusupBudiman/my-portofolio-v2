@@ -1,90 +1,103 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
 
 export default function ProjectCard({
   title,
-  description,
   tools,
-  images, // array of images
+  images,
   github,
   demo,
   isActive = false,
 }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    if (!isHovered || images.length < 2) return;
-
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [isHovered, images]);
+  const [imgIndex, setImgIndex] = useState(0);
 
   const brightnessClass = isActive ? "brightness-100" : "brightness-50";
-  const finalBrightness = isHovered ? "brightness-110" : brightnessClass;
+
+  // Auto-slide gambar saat card active
+  useEffect(() => {
+    let interval;
+    if (isActive && images.length > 1) {
+      interval = setInterval(() => {
+        setImgIndex((prev) => (prev + 1) % images.length);
+      }, 2000);
+    } else {
+      setImgIndex(0);
+    }
+    return () => clearInterval(interval);
+  }, [isActive, images.length]);
 
   return (
-    <div
-      className="relative w-full max-w-full mx-auto rounded-xl shadow-lg overflow-hidden overflow-x-hidden"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        setCurrentIndex(0);
-      }}
-    >
-      {/* Image Container */}
-      <div className="relative w-full h-[400px] rounded-t-xl overflow-hidden">
-        {images.map((img, index) => (
-          <Image
-            key={index}
-            src={img}
-            alt={title}
-            fill
-            priority
-            className={`object-cover object-center transition-opacity duration-1000 ease-in-out
-              ${currentIndex === index ? "opacity-100" : "opacity-0"}
-              ${finalBrightness}`}
-          />
-        ))}
-      </div>
-
-      {/* Content Below Image */}
-      <div
-        className={`p-6 flex flex-col justify-center items-center transition-opacity duration-700
-          ${isActive ? "opacity-100" : "opacity-0"} w-full`}
-      >
-        <h3 className="font-semibold text-3xl sm:text-4xl md:text-5xl mb-2 text-white text-center">
-          {title}
-        </h3>
-        <p className="text-sm sm:text-base mb-4 text-white/80 text-center">
-          {description}
-        </p>
-
-        <div className="flex flex-wrap justify-center gap-2 mb-4">
-          {tools.map((tool, index) => (
-            <span
-              key={index}
-              className="bg-[#f9fc9f] bg-opacity-80 px-2 py-1 rounded-full text-xs font-bold text-black"
+    <div className="relative max-w-[clamp(260px,80vw,840px)] aspect-[16/9] mx-auto shadow-lg overflow-hidden cursor-pointer">
+      {/* Gambar container */}
+      <div className="relative w-full h-[10rem] lg:h-[22rem] overflow-hidden">
+        <div
+          className="flex transition-transform duration-1000 ease-in-out h-full"
+          style={{ transform: `translateX(-${imgIndex * 100}%)` }}
+        >
+          {images.map((img, idx) => (
+            <div
+              key={idx}
+              className="w-full h-full flex-shrink-0 relative rounded-md"
             >
-              {tool}
-            </span>
+              <Image
+                src={img}
+                alt={`${title}-${idx}`}
+                fill
+                className={`object-cover object-center rounded-md ${brightnessClass}`}
+              />
+            </div>
           ))}
         </div>
 
-        <div className="flex justify-center space-x-4 bg-[#202020] px-6 py-1 rounded-full">
-          <Link href={github} target="_blank" className=" text-white">
-            Code
-          </Link>
-          <Link href={demo} target="_blank" className=" text-white">
-            Demo
-          </Link>
+        {/* Tools Icon */}
+        <div className="absolute right-6 bottom-4 flex flex-wrap gap-2 z-20">
+          {tools.map((tool, idx) => (
+            <div
+              key={idx}
+              className="relative w-6 h-6 bg-white bg-opacity-90 rounded-full overflow-hidden border border-gray-200"
+            >
+              <Image src={tool} alt={title} fill className="object-cover" />
+            </div>
+          ))}
         </div>
+      </div>
+
+      {/* Content */}
+      <div
+        className={`flex flex-col justify-center items-center transition-opacity duration-700 w-full relative z-10 ${
+          isActive
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <h3 className="font-semibold text-3xl sm:text-4xl md:text-4xl mb-2 text-white text-center">
+          {title}
+        </h3>
+        {/* <div className="flex justify-center space-x-4 bg-[#202020] px-6 py-1 rounded-full">
+          {github && (
+            <a
+              href={github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white"
+            >
+              Code
+            </a>
+          )}
+          {demo && (
+            <a
+              href={demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white"
+            >
+              Demo
+            </a>
+          )}
+        </div> */}
       </div>
     </div>
   );

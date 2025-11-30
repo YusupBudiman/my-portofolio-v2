@@ -8,8 +8,8 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center">
       <ProjectsSection />
-      <SkillsSection />
       <ExperienceSection />
+      <SkillsSection />
       <ContactSection />
     </div>
   );
