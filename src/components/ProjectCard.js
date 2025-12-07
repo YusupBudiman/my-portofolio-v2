@@ -53,7 +53,13 @@ export default function ProjectCard({
         </div>
 
         {/* Tools Icon */}
-        <div className="absolute right-6 bottom-4 flex flex-wrap gap-2 z-20">
+        <div
+          className={`absolute right-6 bottom-4 flex flex-wrap gap-2 z-20 ${
+            isActive
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none"
+          }`}
+        >
           {tools.map((tool, idx) => (
             <div
               key={idx}

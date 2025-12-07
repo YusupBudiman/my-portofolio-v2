@@ -20,15 +20,6 @@ export const projects = [
 
   {
     id: 2,
-    title: "Movie App - MUI Style",
-    description: "Personal portfolio built with Next.js and Tailwind CSS",
-    tools: ["/images/skills/react-logo.png", "/images/skills/javascript.png"],
-    images: ["/images/projects/muistyle1.png"],
-    github: "https://github.com/YusupBudiman/movie-gallery-mui-style.git",
-    demo: "https://movie-gallery-mui-style.vercel.app/",
-  },
-  {
-    id: 3,
     title: "Sales Prediction",
     description: "Personal portfolio built with Next.js and Tailwind CSS",
     tools: [
@@ -46,6 +37,21 @@ export const projects = [
       "https://github.com/YusupBudiman/retail-app-least-square-quick-sort.git",
     demo: "https://tanimanager.store/",
   },
+
+  {
+    id: 3,
+    title: "Movie App - MUI Style",
+    description: "Personal portfolio built with Next.js and Tailwind CSS",
+    tools: [
+      "/images/skills/react-logo.png",
+      "/images/skills/css.png",
+      "/images/skills/javascript.png",
+    ],
+    images: ["/images/projects/muistyle1.png"],
+    github: "https://github.com/YusupBudiman/movie-gallery-mui-style.git",
+    demo: "https://movie-gallery-mui-style.vercel.app/",
+  },
+
   {
     id: 4,
     title: "Todo List App",
@@ -68,7 +74,11 @@ export const projects = [
       "/images/skills/css.png",
       "/images/skills/python.png",
     ],
-    images: ["/images/projects/chatbot1.png", "/images/projects/chatbot2.png"],
+    images: [
+      "/images/projects/chatbot1.png",
+      "/images/projects/chatbot2.png",
+      "/images/projects/chatbot3.png",
+    ],
     github: "https://github.com/YusupBudiman/ai-medicine-assistant.git",
     demo: "none",
   },
@@ -89,5 +99,36 @@ export const projects = [
     github:
       "https://github.com/sandi-hermawan/49---FatDaySideI---Kang-Techno.git ",
     demo: "https://fatdaysidei.itch.io/49-kang-techno-sks-hunter#download",
+  },
+
+  {
+    id: 7,
+    title: "Parallax Effect - Dark Mode",
+    description: "Personal portfolio built with Next.js and Tailwind CSS",
+    tools: [
+      "/images/skills/react-logo.png",
+      "/images/skills/css.png",
+      "/images/skills/javascript.png",
+    ],
+    images: [
+      "/images/projects/parallax1.png",
+      "/images/projects/parallax2.png",
+    ],
+    github: "https://github.com/YusupBudiman/animated-parallax-darkmode.git",
+    demo: "https://animated-parallax-darkmode.vercel.app/",
+  },
+
+  {
+    id: 8,
+    title: "Starfall Animation",
+    description: "Personal portfolio built with Next.js and Tailwind CSS",
+    tools: [
+      "/images/skills/react-logo.png",
+      "/images/skills/css.png",
+      "/images/skills/javascript.png",
+    ],
+    images: ["/images/projects/starfall.png"],
+    github: "https://github.com/YusupBudiman/starfall-animation.git",
+    demo: "https://starfall-animation.vercel.app/",
   },
 ];

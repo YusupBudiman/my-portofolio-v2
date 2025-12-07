@@ -55,7 +55,7 @@ export default function ContactForm({ onClose }) {
         <div className="flex justify-end mb-2">
           <button
             onClick={onClose}
-            className="text-white rounded-full shadow-lg cursor-pointer hover:text-red-500 transition-colors"
+            className="text-white font-extrabold rounded-full shadow-lg cursor-pointer hover:text-[#9a284b] transition-colors hover:rotate-15"
           >
             ✕
           </button>
