@@ -18,7 +18,7 @@ export default function ProjectCarousel({ projects }) {
       <Swiper
         modules={[EffectCreative]}
         effect="creative"
-        initialSlide={0}
+        initialSlide={1}
         grabCursor
         centeredSlides
         slidesPerView="auto"

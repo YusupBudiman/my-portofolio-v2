@@ -22,7 +22,7 @@ export default function ProjectCard({
     if (isActive && images.length > 1) {
       interval = setInterval(() => {
         setImgIndex((prev) => (prev + 1) % images.length);
-      }, 2000);
+      }, 2500);
     } else {
       setImgIndex(0);
     }
@@ -46,7 +46,7 @@ export default function ProjectCard({
                 src={img}
                 alt={`${title}-${idx}`}
                 fill
-                className={`object-cover object-center rounded-md ${brightnessClass}`}
+                className={`object-fill  rounded-md ${brightnessClass}`}
               />
             </div>
           ))}
